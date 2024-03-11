@@ -23,7 +23,7 @@ Modal.setAppElement('#root');
 
 
 const now = moment().minutes(0).seconds(0).add(1, "hours");
-const end1 = now.clone().add(1,'hours');
+const nowPlus1 = now.clone().add(1,'hours');
 
 
 export const CalendarModal = () => {
@@ -34,19 +34,20 @@ export const CalendarModal = () => {
     title: "Evento",
     notes: "",
     start: now.toDate(),
-    end: end1.toDate()
+    end: nowPlus1.toDate()
   })
 
   const {notes, title, start, end} = formValues
 
-  const handleInputChange = ({target}) => {
+  const handleInputChange = ({ target }) => {
     setFormValues({
-      ...formValues,
-      [target.name]: target.value
-    })
-  }
+        ...formValues,
+        [target.name]: target.value
+    });
+}
 
  const closeModal = (e) => {
+  
       console.log(e);
     }
 
@@ -87,7 +88,7 @@ export const CalendarModal = () => {
   
 
 
-const [dateEnd, setDateEnd] = useState( end1.toDate())
+const [dateEnd, setDateEnd] = useState( nowPlus1.toDate())
 
 const handleEndDateChange = (e) => {
   setDateEnd( e );
