@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
@@ -6,6 +6,8 @@ import moment from 'moment';
 import Swal from "sweetalert2"
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import { uiCloseModal } from '../../actions/ui';
+import { eventAddNew, eventClearActiveEvent, eventUpdated } from '../../actions/events';
+
 
 
 
@@ -27,21 +29,24 @@ Modal.setAppElement('#root');
 const now = moment().minutes(0).seconds(0).add(1, "hours");
 const nowPlus1 = now.clone().add(1,'hours');
 
+const initEvent = {
+  title: '',
+  notes: '',
+  start: now.toDate(),
+  end: nowPlus1.toDate()
+}
+
 
 export const CalendarModal = () => {
 
   const dispatch = useDispatch();
 
   const {modalOpen} = useSelector(state => state.ui);
+  const {activeEvent} = useSelector(state => state.calendar);
 
   const [titleValid, setTitleValid] = useState(true)
 
-  const [formValues, setFormValues] = useState({
-    title: "Evento",
-    notes: "",
-    start: now.toDate(),
-    end: nowPlus1.toDate()
-  })
+  const [formValues, setFormValues] = useState(initEvent)
 
   const {notes, title, start, end} = formValues
 
@@ -52,9 +57,18 @@ export const CalendarModal = () => {
     });
 }
 
+useEffect(() => {
+  if ( activeEvent ) {
+      setFormValues( activeEvent );
+  } 
+}, [activeEvent, setFormValues])
+
+
  const closeModal = (e) => {
   
       dispatch(uiCloseModal())
+      dispatch(eventClearActiveEvent());
+      setFormValues(initEvent)
     }
 
   const handleSubmitForm = (e) => {
@@ -73,6 +87,21 @@ export const CalendarModal = () => {
     if (title.trim().length < 2) {
       return setTitleValid(false);
     }
+
+    if ( activeEvent ) {
+      dispatch( eventUpdated( formValues ) )
+  } else {
+    dispatch(eventAddNew({
+      ...formValues,
+      id: new Date().getTime(),
+      user: {
+        _id: "123",
+        name: "Federico"
+      }
+    }))
+  }
+
+    
   
     setTitleValid(true);
     // Llamada a la función closeModal() en lugar de la función no definida
