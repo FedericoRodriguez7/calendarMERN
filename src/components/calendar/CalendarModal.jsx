@@ -6,7 +6,7 @@ import moment from 'moment';
 import Swal from "sweetalert2"
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import { uiCloseModal } from '../../actions/ui';
-import { eventAddNew, eventClearActiveEvent, eventUpdated } from '../../actions/events';
+import { eventClearActiveEvent, eventStartAddNew, eventStartUpdate } from '../../actions/events';
 
 
 
@@ -91,16 +91,9 @@ useEffect(() => {
     }
 
     if ( activeEvent ) {
-      dispatch( eventUpdated( formValues ) )
+      dispatch( eventStartUpdate( formValues ) )
   } else {
-    dispatch(eventAddNew({
-      ...formValues,
-      id: new Date().getTime(),
-      user: {
-        _id: "123",
-        name: "Federico"
-      }
-    }))
+    dispatch(eventStartAddNew(formValues))
   }
 
     
