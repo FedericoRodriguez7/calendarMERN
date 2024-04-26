@@ -39,6 +39,8 @@ const initEvent = {
 
 export const CalendarModal = () => {
 
+ 
+
   const dispatch = useDispatch();
 
   const {modalOpen} = useSelector(state => state.ui);
@@ -140,14 +142,16 @@ const handleEndDateChange = (e) => {
 
     
     <Modal
+    
       isOpen={modalOpen}
       // onAfterOpen={afterOpenModal}
-      //  onRequestClose={closeModal}
+        onRequestClose={closeModal}
       closeTimeoutMS={200}
       style={customStyles}
       className={"modal"}
       overlayClassName={"modal-fondo"}
     >
+      
 
       <h1> Nuevo evento </h1>
       <hr />
@@ -204,7 +208,7 @@ const handleEndDateChange = (e) => {
         </button>
 
       </form>
-
+      
     </Modal>
   )
 }
